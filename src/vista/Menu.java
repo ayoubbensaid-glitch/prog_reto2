@@ -208,9 +208,11 @@ public class Menu {
 
         controladorCompra.insertarCompra(compra);
 
+        int numeroEntrada = 1;
         for (Entrada e : carritoEntradas) {
             e.setCompra(compra);
-            controladorEntrada.insertarEntrada(e);
+            controladorEntrada.insertarEntrada(e, numeroEntrada);
+            numeroEntrada++;
         }
 
         controladorTicket.guardarTicket(compra.getCompra_ID());

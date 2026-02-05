@@ -40,32 +40,33 @@ private Connection conexion;
 	}
 	
 	
-	public void insertarEntrada(Entrada entrada) {
+	public void insertarEntrada(Entrada entrada, int numeroEntrada) {
 	    PreparedStatement ps = null;
 	    boolean conexionRealizada = iniciarConexion();
-	    
+
 	    if (conexionRealizada) {
 	        try {
 	            String sql = SQLQueries.INSERT_ENTRADA;
 	            ps = conexion.prepareStatement(sql);
-	            
+
 	            ps.setString(1, entrada.getCompra().getCompra_ID());
 	            ps.setString(2, entrada.getSesion().getSesion_ID());
 	            ps.setInt(3, entrada.getEntrada_Personas());
 	            ps.setDouble(4, entrada.getEntrada_Precio());
-	            
+
 	            ps.executeUpdate();
-	            
-	            System.out.println("✅ Entrada insertada correctamente.");
-	            
+
+	            System.out.println("✅ Entrada " + numeroEntrada + " insertada correctamente.");
+
 	        } catch (SQLException sqle) {
 	            System.out.println("Error con la base de datos: " + sqle.getMessage());
 	        } finally {
-	            try { if(ps != null) ps.close(); } catch (Exception e) {}
+	            try { if (ps != null) ps.close(); } catch (Exception e) {}
 	            finalizarConexion();
 	        }
 	    }
 	}
+
 
 
 	

@@ -6,10 +6,10 @@ import modelo.Entrada;
 import modelo.GestorEntrada;
 public class ControladorEntrada {
 	
-	public void  insertarEntrada(Entrada entrada)
+	public void insertarEntrada(Entrada entrada, int numeroEntrada)
 	{
-		GestorEntrada gestorEntrada = new GestorEntrada();
-		gestorEntrada.insertarEntrada(entrada);
+	    GestorEntrada gestorEntrada = new GestorEntrada();
+	    gestorEntrada.insertarEntrada(entrada, numeroEntrada);
 	}
 
 	public ArrayList<Entrada> buscarEntradasPorCompra(String Compra_ID)
