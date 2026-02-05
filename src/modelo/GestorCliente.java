@@ -87,17 +87,15 @@ public class GestorCliente {
 		return cliente;
 	}
 	
-	public void insertarCliente(Cliente cliente) {
-		
+	public boolean insertarCliente(Cliente cliente) {
+
 	    if (!validarEmailRegex(cliente.getCliente_Correo())) {
-	        System.out.println("Error: Email inválido. Debe contener @ y .com");
-	        return;
+	        System.out.println("❌ Error: Email inválido. Debe contener @ y .com");
+	        return false;
 	    }
-	    
+
 	    PreparedStatement sentencia = null;
-	    boolean conexionRealizada = iniciarConexion();
-	    
-	    if (conexionRealizada) {
+	    if (iniciarConexion()) {
 	        try {
 	            String sql = SQLQueries.INSERT_CLIENTE;
 	            sentencia = conexion.prepareStatement(sql);
@@ -106,21 +104,30 @@ public class GestorCliente {
 	            sentencia.setString(3, cliente.getCliente_Apel());
 	            sentencia.setString(4, cliente.getCliente_Correo());
 	            sentencia.setString(5, cliente.getCliente_Pass_hash());
-	            
+
 	            sentencia.executeUpdate();
-	            
-	        } catch (SQLException sqle) {
-	            System.out.println("Error con la base de datos: " + sqle.getMessage());
+	            return true;
+
+	        } catch (SQLException e) {
+	            if (e.getMessage().contains("Duplicate entry")) {
+	                System.out.println("⚠ El cliente ya se encuentra registrado");
+	            } else {
+	                System.out.println("⚠ Error con la base de datos: " + e.getMessage());
+	            }
+	            return false;
 	        } finally {
 	            try {
 	                if (sentencia != null) sentencia.close();
 	            } catch (SQLException e) {
-	                System.out.println("Error al cerrar la sentencia");
+	                System.out.println("⚠ Error al cerrar la sentencia");
 	            }
 	            finalizarConexion();
 	        }
 	    }
+	    return false;
 	}
+
+
 
 	 public static String sha256(String Cliente_Pass_hash) {
 	        try {

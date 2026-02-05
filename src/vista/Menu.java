@@ -254,7 +254,6 @@ public class Menu {
             System.out.println("❌ Login fallido.");
         }
     }
-
     private boolean registrarCliente() {
 
         System.out.print("Nombre: ");
@@ -270,14 +269,18 @@ public class Menu {
         do {
             System.out.print("Email: ");
             email = teclado.nextLine();
-            if (!controladorCliente.validarEmail(email))
-                System.out.println("❌ Email inválido.");
+            if (!controladorCliente.validarEmail(email)) {
+                System.out.println("❌ Email inválido. Debe contener @ y .com");
+            }
         } while (!controladorCliente.validarEmail(email));
 
         String password;
         do {
             System.out.print("Contraseña (mín 6 caracteres): ");
             password = teclado.nextLine();
+            if (password.length() < 6) {
+                System.out.println("❌ La contraseña debe tener al menos 6 caracteres");
+            }
         } while (password.length() < 6);
 
         Cliente nuevo = new Cliente();
@@ -287,10 +290,13 @@ public class Menu {
         nuevo.setCliente_Correo(email);
         nuevo.setCliente_Pass_hash(GestorCliente.sha256(password));
 
-        controladorCliente.insertarCliente(nuevo);
-
-        clienteLogueado = nuevo;
-        System.out.println("✅ Cliente registrado correctamente.");
-        return true;
+        if (controladorCliente.insertarCliente(nuevo)) {
+            clienteLogueado = nuevo;
+            System.out.println("✅ Cliente registrado correctamente.");
+            return true;
+        } else {
+            return false;
+        }
     }
+
 }
